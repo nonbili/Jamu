@@ -1,0 +1,7 @@
+An app to help learn Japanese.
+
+## Features
+
+- Gojuon (五十音)
+- Numbers (数字)
+- NHK Easy News

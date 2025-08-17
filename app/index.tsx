@@ -7,6 +7,7 @@ import { Button, ContextMenu } from '@expo/ui/jetpack-compose'
 import { colors } from '@/lib/colors'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SettingsModal } from '@/components/modal/SettingsModal'
+import { JapaneseMissingModal } from '@/components/modal/JapaneseMissingModal'
 
 const items = [
   ['/gojuon', '🔤 五十音'],
@@ -63,6 +64,7 @@ export default function HomeScreen() {
         ))}
       </ScrollView>
       {settingsModalShown && <SettingsModal onClose={() => setSettingsModalShown(false)} />}
+      <JapaneseMissingModal />
     </>
   )
 }

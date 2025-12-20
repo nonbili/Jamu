@@ -1,7 +1,13 @@
 import * as cheerio from 'cheerio/slim'
 import { News, nhk$ } from '@/states/nhk'
+import { XMLParser } from 'fast-xml-parser'
 
 const threshold = 3 * 3600 * 1000 // 3 hours
+
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: '',
+})
 
 export async function fetchNewsList() {
   const syncedAt = nhk$.syncedAt.get()
@@ -11,8 +17,8 @@ export async function fetchNewsList() {
     return
   }
 
-  const res = await fetch('https://www3.nhk.or.jp/news/easy/news-list.json')
-  const [data] = await res.json()
+  const res = await fetch('https://nhkeasier.com/feed/')
+  const xml = await res.text()
   try {
     const list = Object.values(data).flat().slice(0, 50)
     const newsList = list.map((news: any) => {

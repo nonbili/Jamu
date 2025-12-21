@@ -21,6 +21,9 @@ function patchNewsBody(body: string) {
           rt {
             margin-bottom: 4px;
           }
+          img {
+            max-width: 100%;
+          }
         </style>
       </head>
       <body style="line-height:2.8; font-size:18px">
@@ -31,22 +34,16 @@ function patchNewsBody(body: string) {
 }
 export default function NhkIdScreen() {
   const params = useLocalSearchParams()
-  const [html, setHtml] = useState('')
   const { list, autoPlay } = use$(nhk$)
   const settings = {}
   const router = useRouter()
 
-  const { news, index } = useMemo(() => {
+  const { news, index, html } = useMemo(() => {
     const index = list.findIndex((x) => x.id == params.id)
-    return { news: list[index], index }
+    const news = list[index]
+    const html = patchNewsBody(news.html)
+    return { news, index, html }
   }, [list, params.id])
-
-  useEffect(() => {
-    ;(async () => {
-      const body = await fetchNewsArticle(params.id as string)
-      setHtml(patchNewsBody(body || ''))
-    })()
-  }, [])
 
   if (!news) {
     return null
@@ -72,12 +69,12 @@ export default function NhkIdScreen() {
               <ContextMenu color={colors.bg}>
                 {/* @ts-expect-error ?? */}
                 <ContextMenu.Items>
-                  <Switch
-                    value={autoPlay}
-                    onValueChange={(checked) => nhk$.autoPlay.set(checked)}
-                    label="Auto play next  "
-                    variant="switch"
-                  />
+                  {/* <Switch
+                      value={autoPlay}
+                      onValueChange={(checked) => nhk$.autoPlay.set(checked)}
+                      label="Auto play next  "
+                      variant="switch"
+                      /> */}
                   <Button
                     elementColors={{
                       containerColor: colors.bg,
@@ -111,9 +108,16 @@ export default function NhkIdScreen() {
           {dayjs(news.publishedAt).format('MM/DD HH:mm')}
         </Text>
         <View style={{ flex: 1 }}>
-          {html && <WebView className="text-lg" originWhitelist={['*']} source={{ html }} textZoom={100} />}
+          {html && (
+            <WebView
+              className="text-lg"
+              originWhitelist={['*']}
+              source={{ html, baseUrl: 'https://nhkeasier.com' }}
+              textZoom={100}
+            />
+          )}
         </View>
-        {news.voiceId && <NhkPlayer voiceId={news.voiceId} onDone={onNext} />}
+        {news.audio && <NhkPlayer audio={news.audio} onDone={onNext} />}
       </View>
     </>
   )

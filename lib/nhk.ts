@@ -1,7 +1,24 @@
 import * as cheerio from 'cheerio/slim'
 import { News, nhk$ } from '@/states/nhk'
+import { XMLParser } from 'fast-xml-parser'
 
 const threshold = 3 * 3600 * 1000 // 3 hours
+
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: '',
+})
+
+interface Item {
+  title: string
+  link: string
+  description: string
+  pubDate: string
+  guid: string
+}
+
+const imgRegExp = /<img src="([^"]+)"/
+const audioRegExp = /<audio src="([^"]+)"/
 
 export async function fetchNewsList() {
   const syncedAt = nhk$.syncedAt.get()
@@ -11,30 +28,36 @@ export async function fetchNewsList() {
     return
   }
 
-  const res = await fetch('https://www3.nhk.or.jp/news/easy/news-list.json')
-  const [data] = await res.json()
+  const res = await fetch('https://nhkeasier.com/feed/')
+  const xml = await res.text()
+  const data = parser.parse(xml)
+
   try {
-    const list = Object.values(data).flat().slice(0, 50)
-    const newsList = list.map((news: any) => {
-      const {
-        news_id,
-        title,
-        news_easy_image_uri,
-        news_web_image_uri,
-        news_easy_voice_uri,
-        news_publication_time,
-        news_web_url,
-      } = news
-      const publishedAt = new Date(news_publication_time + '+09:00')
+    const list = data.rss.channel.item.slice(0, 50)
+    const newsList = list.map((item: Item) => {
+      const { title, link, description, pubDate, guid } = item
+      const publishedAt = new Date(pubDate)
+      const id = new URL(guid).pathname.split('/').at(-2)
+      const imgMatches = description.match(imgRegExp)
+      let image
+      if (imgMatches) {
+        image = new URL(imgMatches[1], 'https://nhkeasier.com').href
+      }
+      const audioMatches = description.match(audioRegExp)
+      let audio
+      if (audioMatches) {
+        audio = new URL(audioMatches[1], 'https://nhkeasier.com').href
+      }
+      const audioIndex = description.indexOf('<audio')
+      const html = audioIndex ? description.slice(0, audioIndex) : description
       return {
-        id: news_id,
-        image: news_easy_image_uri
-          ? `https://www3.nhk.or.jp/news/easy/${news_id}/${news_easy_image_uri}`
-          : news_web_image_uri,
+        id,
+        html,
+        image,
         title,
         publishedAt,
-        voiceId: news_easy_voice_uri?.split('.')[0],
-        webUrl: news_web_url,
+        audio,
+        webUrl: link,
       }
     })
     nhk$.assign({ list: newsList, syncedAt: now })

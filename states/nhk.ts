@@ -6,8 +6,9 @@ export interface News {
   id: string
   image: string
   title: string
+  html: string
   publishedAt: Date
-  voiceId: string
+  audio: string
   webUrl: string
 }
 

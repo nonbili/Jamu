@@ -21,8 +21,8 @@ function formatSeconds(v: number) {
 
 setAudioModeAsync({ shouldPlayInBackground: true })
 
-export const NhkPlayer: React.FC<{ voiceId: string; onDone: () => void }> = ({ voiceId, onDone }) => {
-  const player = useAudioPlayer(`https://vod-stream.nhk.jp/news/easy_audio/${voiceId}/index.m3u8`)
+export const NhkPlayer: React.FC<{ audio: string; onDone: () => void }> = ({ audio, onDone }) => {
+  const player = useAudioPlayer(audio)
   const status = useAudioPlayerStatus(player)
 
   useEffect(() => {

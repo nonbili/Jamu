@@ -13,6 +13,7 @@ const items = [
   ['/gojuon', '🔤 五十音'],
   ['/number', '🔢 数字'],
   ['/nhk', '📰 NHK Easy News'],
+  ['/quiz', '❓ クイズ'],
 ]
 
 export default function HomeScreen() {
@@ -27,7 +28,6 @@ export default function HomeScreen() {
           headerRight: () => (
             <View className="-mr-3">
               <ContextMenu color={colors.bg}>
-                {/* @ts-expect-error ?? */}
                 <ContextMenu.Items>
                   <Button
                     elementColors={{
@@ -54,12 +54,12 @@ export default function HomeScreen() {
           ),
         }}
       />
-      <ScrollView className="">
+      <ScrollView className="bg-slate-50">
         {items.map(([path, label]) => (
-          <Link className="mt-1" href={path as any} key={path}>
-            <View className="w-full bg-white px-4 py-5">
+          <Link className="mt-1" href={path as any} key={path} asChild>
+            <Pressable className="w-full bg-white px-4 py-5 active:bg-slate-100">
               <Text className="text-xl">{label}</Text>
-            </View>
+            </Pressable>
           </Link>
         ))}
       </ScrollView>

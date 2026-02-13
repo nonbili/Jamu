@@ -67,7 +67,6 @@ export default function NhkIdScreen() {
           headerRight: () => (
             <View className="-mr-3">
               <ContextMenu color={colors.bg}>
-                {/* @ts-expect-error ?? */}
                 <ContextMenu.Items>
                   {/* <Switch
                       value={autoPlay}

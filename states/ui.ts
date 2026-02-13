@@ -1,11 +1,9 @@
 import { observable } from '@legendapp/state'
 
-interface Store {
-  nhkAutoPlaying: boolean
+interface UIStore {
   japaneseMissingModalOpen: boolean
 }
 
-export const ui$ = observable<Store>({
-  nhkAutoPlaying: false,
+export const ui$ = observable<UIStore>({
   japaneseMissingModalOpen: false,
 })

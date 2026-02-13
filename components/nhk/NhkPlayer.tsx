@@ -5,6 +5,7 @@ import { Slider } from '@expo/ui/jetpack-compose'
 import { IconForward, IconRewind } from '../icons/Icons'
 import { useEffect } from 'react'
 import { ui$ } from '@/states/ui'
+import { settings$ } from '@/states/settings'
 import { nhk$ } from '@/states/nhk'
 
 const colors: any = {}
@@ -26,9 +27,9 @@ export const NhkPlayer: React.FC<{ audio: string; onDone: () => void }> = ({ aud
   const status = useAudioPlayerStatus(player)
 
   useEffect(() => {
-    if (ui$.nhkAutoPlaying.get()) {
+    if (settings$.nhkAutoPlaying.get()) {
       player.play()
-      ui$.nhkAutoPlaying.set(false)
+      settings$.nhkAutoPlaying.set(false)
     }
   }, [])
 

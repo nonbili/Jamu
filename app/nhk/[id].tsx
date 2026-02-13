@@ -11,6 +11,7 @@ import { Button, ContextMenu, Switch } from '@expo/ui/jetpack-compose'
 import { colors } from '@/lib/colors'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { ui$ } from '@/states/ui'
+import { settings$ } from '@/states/settings'
 
 function patchNewsBody(body: string) {
   return /* HTML */ `
@@ -52,7 +53,7 @@ export default function NhkIdScreen() {
   const onNext = () => {
     if (autoPlay && index < list.length - 1) {
       const item = list[index + 1]
-      ui$.nhkAutoPlaying.set(true)
+      settings$.nhkAutoPlaying.set(true)
       setTimeout(() => {
         router.replace(`/nhk/${item.id}`)
       })
@@ -67,7 +68,6 @@ export default function NhkIdScreen() {
           headerRight: () => (
             <View className="-mr-3">
               <ContextMenu color={colors.bg}>
-                {/* @ts-expect-error ?? */}
                 <ContextMenu.Items>
                   {/* <Switch
                       value={autoPlay}
@@ -88,13 +88,12 @@ export default function NhkIdScreen() {
                   </Button>
                 </ContextMenu.Items>
                 <ContextMenu.Trigger>
-                  <MaterialIcons.Button
-                    color={colors.icon}
-                    backgroundColor="transparent"
-                    iconStyle={{ marginRight: 0 }}
-                    name="more-vert"
-                    size={24}
-                    underlayColor={colors.underlay}
+                  <Button
+                    elementColors={{
+                      containerColor: 'transparent',
+                      contentColor: colors.icon,
+                    }}
+                    leadingIcon="filled.MoreVert"
                   />
                 </ContextMenu.Trigger>
               </ContextMenu>

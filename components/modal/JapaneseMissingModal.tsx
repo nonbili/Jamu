@@ -6,17 +6,27 @@ import { colors } from '@/lib/colors'
 import { clsx } from '@/lib/utils'
 import { use$ } from '@legendapp/state/react'
 import { ui$ } from '@/states/ui'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const repo = 'https://github.com/nonbili/Jamu'
 
 export const JapaneseMissingModal = () => {
+  const insets = useSafeAreaInsets()
   const open = use$(ui$.japaneseMissingModalOpen)
   const onClose = () => ui$.japaneseMissingModalOpen.set(false)
 
   return (
     open && (
       <Modal animationType="slide" transparent={true} visible={true} onRequestClose={onClose}>
-        <View className="flex-1 bg-[#f5f5f4] py-4 px-4">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#f5f5f4',
+            paddingTop: insets.top + 16,
+            paddingBottom: insets.bottom + 16,
+            paddingHorizontal: 16,
+          }}
+        >
           <View className="flex-1">
             <View className="items-center my-8">
               <Text className="text-lg font-medium">Install Japanese Language</Text>

@@ -2,20 +2,24 @@
 
 An app to help learn Japanese.
 
-[<img src="https://f-droid.org/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/jp.nonbili.jamu/)
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+[<img src="https://img.shields.io/badge/Google_Play-01875f?style=for-the-badge&logo=google-play"
       alt="Get it on Google Play"
-      height="80">](https://play.google.com/store/apps/details?id=jp.nonbili.jamu)
-
-Or download the latest APK from the [Releases Section](https://github.com/nonbili/Jamu/releases/latest).
+      hspace="16"
+      height="50">](https://play.google.com/store/apps/details?id=jp.nonbili.jamu)
+[<img src="https://img.shields.io/badge/F--Droid-1976D2?style=for-the-badge&logo=f-droid"
+      alt="Get it on F-Droid"
+      height="50">](https://f-droid.org/packages/jp.nonbili.jamu/)
+[<img src="https://img.shields.io/badge/GitHub%20Releases-100000?style=for-the-badge&logo=github"
+      alt="Get it on GitHub"
+      hspace="16"
+      height="50">](https://github.com/nonbili/Jamu/releases/latest)
 
 ## Features
 
 - Gojuon (五十音)
 - Numbers (数字)
 - NHK Easy News
+- Quiz
 
 ## Screenshots
 

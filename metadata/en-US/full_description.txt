@@ -6,4 +6,5 @@ An app to help learn Japanese.
 <li>Gojuon (五十音)</li>
 <li>Numbers (数字)</li>
 <li>NHK Easy News</li>
+<li>Quiz</li>
 </ul>

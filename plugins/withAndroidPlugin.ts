@@ -7,7 +7,7 @@ const withAndroidSigningConfig: ConfigPlugin = (config) => {
     config.modResults.contents = config.modResults.contents
       .replace(
         'android {',
-        `ext.abiCodes = [x86:1, x86_64:2, 'armeabi-v7a':3, 'arm64-v8a': 4]
+        `ext.abiCodes = [x86_64:2, 'armeabi-v7a':3, 'arm64-v8a': 4]
 
 android {`,
       )

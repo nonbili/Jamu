@@ -1,7 +1,7 @@
 import { NhkPlayer } from '@/components/nhk/NhkPlayer'
 import { fetchNewsArticle } from '@/lib/nhk'
 import { nhk$ } from '@/states/nhk'
-import { use$ } from '@legendapp/state/react'
+import { useValue } from '@legendapp/state/react'
 import dayjs from 'dayjs'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useMemo, useState } from 'react'
@@ -12,8 +12,9 @@ import { colors } from '@/lib/colors'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { ui$ } from '@/states/ui'
 import { settings$ } from '@/states/settings'
+import { useColorScheme } from 'nativewind'
 
-function patchNewsBody(body: string) {
+function patchNewsBody(body: string, isDark: boolean) {
   return /* HTML */ `
     <html>
       <head>
@@ -25,9 +26,18 @@ function patchNewsBody(body: string) {
           img {
             max-width: 100%;
           }
+          body {
+            line-height: 2.8;
+            font-size: 18px;
+            background-color: ${isDark ? '#020617' : '#ffffff'};
+            color: ${isDark ? '#f8fafc' : '#020617'};
+          }
+          a {
+            color: ${isDark ? '#60a5fa' : '#2563eb'};
+          }
         </style>
       </head>
-      <body style="line-height:2.8; font-size:18px">
+      <body>
         ${body}
       </body>
     </html>
@@ -35,16 +45,18 @@ function patchNewsBody(body: string) {
 }
 export default function NhkIdScreen() {
   const params = useLocalSearchParams()
-  const { list, autoPlay } = use$(nhk$)
-  const settings = {}
+  const { list, autoPlay } = useValue(nhk$)
+  const { colorScheme } = useColorScheme()
+  const isDark = colorScheme === 'dark'
+  const currentColors = isDark ? colors.dark : colors.light
   const router = useRouter()
 
   const { news, index, html } = useMemo(() => {
     const index = list.findIndex((x) => x.id == params.id)
     const news = list[index]
-    const html = patchNewsBody(news.html)
+    const html = news ? patchNewsBody(news.html, isDark) : ''
     return { news, index, html }
-  }, [list, params.id])
+  }, [list, params.id, isDark])
 
   if (!news) {
     return null
@@ -67,22 +79,14 @@ export default function NhkIdScreen() {
           title: '',
           headerRight: () => (
             <View className="-mr-3">
-              <ContextMenu color={colors.bg}>
+              <ContextMenu color={currentColors.bg}>
                 <ContextMenu.Items>
-                  {/* <Switch
-                      value={autoPlay}
-                      onValueChange={(checked) => nhk$.autoPlay.set(checked)}
-                      label="Auto play next  "
-                      variant="switch"
-                      /> */}
                   <Button
                     elementColors={{
-                      containerColor: colors.bg,
-                      contentColor: colors.text,
+                      containerColor: currentColors.bg,
+                      contentColor: currentColors.text,
                     }}
-                    onPress={() =>
-                      Share.share({ message: `https://www3.nhk.or.jp/news/easy/${news.id}/${news.id}.html` })
-                    }
+                    onPress={() => Share.share({ message: news.webUrl })}
                   >
                     Share
                   </Button>
@@ -91,25 +95,27 @@ export default function NhkIdScreen() {
                   <Button
                     elementColors={{
                       containerColor: 'transparent',
-                      contentColor: colors.icon,
+                      contentColor: currentColors.icon,
                     }}
                     leadingIcon="filled.MoreVert"
-                  />
+                  >
+                    {''}
+                  </Button>
                 </ContextMenu.Trigger>
               </ContextMenu>
             </View>
           ),
         }}
       />
-      <View className="flex-1">
-        <Text className="bg-white text-xl font-semibold px-2 pt-4">{news.title}</Text>
-        <Text className="bg-white text-sm text-gray-500 px-2 pt-2 pb-2">
+      <View className="flex-1 bg-white dark:bg-slate-950">
+        <Text className="bg-white dark:bg-slate-950 text-xl font-semibold px-2 pt-4 dark:text-white">{news.title}</Text>
+        <Text className="bg-white dark:bg-slate-950 text-sm text-gray-500 px-2 pt-2 pb-2 dark:text-gray-400">
           {dayjs(news.publishedAt).format('MM/DD HH:mm')}
         </Text>
         <View style={{ flex: 1 }}>
           {html && (
             <WebView
-              className="text-lg"
+              className="text-lg bg-white dark:bg-slate-950"
               originWhitelist={['*']}
               source={{ html, baseUrl: 'https://nhkeasier.com' }}
               textZoom={100}

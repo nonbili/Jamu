@@ -2,8 +2,7 @@ import { Link, Stack } from 'expo-router'
 import { Pressable, ScrollView, Text, View } from 'react-native'
 import { colors } from '@/lib/colors'
 import { settings$ } from '@/states/settings'
-import { use$ } from '@legendapp/state/react'
-import { observer } from '@legendapp/state/react'
+import { useValue, observer } from '@legendapp/state/react'
 
 const allCategories = [
   { id: 'gojuon', label: '🔤 五十音', description: 'Hiragana & Katakana' },
@@ -13,7 +12,7 @@ const allCategories = [
 ]
 
 const QuizIndex = observer(() => {
-  const { quizCategories } = use$(settings$)
+  const { quizCategories } = useValue(settings$)
   
   const categories = allCategories.filter(cat => {
     if (cat.id === 'mixed') return true
@@ -23,28 +22,28 @@ const QuizIndex = observer(() => {
   return (
     <>
       <Stack.Screen options={{ title: 'クイズ', headerBackTitle: 'Back' }} />
-      <ScrollView className="flex-1 bg-slate-50">
+      <ScrollView className="flex-1 bg-slate-50 dark:bg-slate-950">
         <View className="p-4">
-          <Text className="mb-4 text-sm font-bold text-slate-500">CATEGORIES</Text>
+          <Text className="mb-4 text-sm font-bold text-slate-500 uppercase">Categories</Text>
           {categories.length > 1 ? (
             categories.map((cat) => (
               <Link key={cat.id} href={`/quiz/${cat.id}` as any} asChild>
-                <Pressable className="mb-3 rounded-xl bg-white p-5 shadow-sm active:bg-slate-100">
-                  <Text className="text-xl font-bold">{cat.label}</Text>
-                  <Text className="text-slate-500">{cat.description}</Text>
+                <Pressable className="mb-3 rounded-xl bg-white dark:bg-slate-900 p-5 active:bg-slate-100 dark:active:bg-slate-800">
+                  <Text className="text-xl font-bold dark:text-white">{cat.label}</Text>
+                  <Text className="text-slate-500 dark:text-slate-400">{cat.description}</Text>
                 </Pressable>
               </Link>
             ))
           ) : (
-            <View className="bg-white p-5 rounded-xl shadow-sm mb-3">
-              <Text className="text-slate-500 text-center">Please enable at least one category in Settings.</Text>
+            <View className="bg-white dark:bg-slate-900 p-5 rounded-xl mb-3">
+              <Text className="text-slate-500 dark:text-slate-400 text-center">Please enable at least one category in Settings.</Text>
             </View>
           )}
 
-          <Text className="mb-4 mt-8 text-sm font-bold text-slate-500">HISTORY</Text>
+          <Text className="mb-4 mt-8 text-sm font-bold text-slate-500 uppercase">History</Text>
           <Link href="/quiz/history" asChild>
-            <Pressable className="rounded-xl bg-white p-5 shadow-sm active:bg-slate-100">
-              <Text className="text-lg">View Last 20 Sessions</Text>
+            <Pressable className="rounded-xl bg-white dark:bg-slate-900 p-5 active:bg-slate-100 dark:active:bg-slate-800">
+              <Text className="text-lg dark:text-white">View Last 20 Sessions</Text>
             </Pressable>
           </Link>
         </View>

@@ -3,6 +3,7 @@ import { syncObservable } from '@legendapp/state/sync'
 import { ObservablePersistMMKV } from '@legendapp/state/persist-plugins/mmkv'
 
 interface SettingsStore {
+  theme: 'light' | 'dark' | 'system'
   nhkAutoPlaying: boolean
   quizCategories: {
     gojuon: boolean
@@ -12,6 +13,7 @@ interface SettingsStore {
 }
 
 export const settings$ = observable<SettingsStore>({
+  theme: 'system',
   nhkAutoPlaying: false,
   quizCategories: {
     gojuon: true,

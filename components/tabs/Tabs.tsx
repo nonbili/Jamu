@@ -14,9 +14,9 @@ export const Tabs: React.FC<{
           <Pressable
             key={tab}
             onPress={() => onChange(index)}
-            className={clsx('px-4 py-2 rounded-md', active ? 'bg-green-500' : 'bg-gray-100')}
+            className={clsx('px-4 py-2 rounded-md', active ? 'bg-green-500' : 'bg-gray-100 dark:bg-slate-800')}
           >
-            <Text className={clsx(active && 'text-white')}>{tab}</Text>
+            <Text className={clsx(active ? 'text-white' : 'dark:text-white')}>{tab}</Text>
           </Pressable>
         )
       })}

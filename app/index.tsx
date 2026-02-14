@@ -8,6 +8,7 @@ import { colors } from '@/lib/colors'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SettingsModal } from '@/components/modal/SettingsModal'
 import { JapaneseMissingModal } from '@/components/modal/JapaneseMissingModal'
+import { useColorScheme } from 'nativewind'
 
 const items = [
   ['/gojuon', '🔤 五十音'],
@@ -18,6 +19,9 @@ const items = [
 
 export default function HomeScreen() {
   const [settingsModalShown, setSettingsModalShown] = useState(false)
+  const { colorScheme } = useColorScheme()
+  const isDark = colorScheme === 'dark'
+  const currentColors = isDark ? colors.dark : colors.light
 
   return (
     <>
@@ -27,12 +31,12 @@ export default function HomeScreen() {
           headerTitleAlign: 'center',
           headerRight: () => (
             <View className="-mr-3">
-              <ContextMenu color={colors.bg}>
+              <ContextMenu color={currentColors.bg}>
                 <ContextMenu.Items>
                   <Button
                     elementColors={{
-                      containerColor: colors.bg,
-                      contentColor: colors.text,
+                      containerColor: currentColors.bg,
+                      contentColor: currentColors.text,
                     }}
                     onPress={() => setSettingsModalShown(true)}
                   >
@@ -43,21 +47,23 @@ export default function HomeScreen() {
                   <Button
                     elementColors={{
                       containerColor: 'transparent',
-                      contentColor: colors.icon,
+                      contentColor: currentColors.icon,
                     }}
                     leadingIcon="filled.MoreVert"
-                  />
+                  >
+                    {''}
+                  </Button>
                 </ContextMenu.Trigger>
               </ContextMenu>
             </View>
           ),
         }}
       />
-      <ScrollView className="bg-slate-50">
+      <ScrollView className="bg-slate-50 dark:bg-slate-950">
         {items.map(([path, label]) => (
           <Link className="mt-1" href={path as any} key={path} asChild>
-            <Pressable className="w-full bg-white px-4 py-5 active:bg-slate-100">
-              <Text className="text-xl">{label}</Text>
+            <Pressable className="w-full bg-white dark:bg-slate-900 px-4 py-5 active:bg-slate-100 dark:active:bg-slate-800">
+              <Text className="text-xl dark:text-white">{label}</Text>
             </Pressable>
           </Link>
         ))}

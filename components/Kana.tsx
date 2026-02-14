@@ -41,9 +41,9 @@ export const Kana: React.FC<{ value: string; className?: string }> = ({ value, c
       {kanas.map((kana, index) => (
         <Fragment key={kana}>
           <Pressable onPress={() => speakJa([kana])}>
-            <Text className={className || 'text-lg text-orange-700'}>{kana}</Text>
+            <Text className={className || 'text-lg text-orange-700 dark:text-orange-500'}>{kana}</Text>
           </Pressable>
-          {index < kanas.length - 1 && <Text className="mr-1">、</Text>}
+          {index < kanas.length - 1 && <Text className="mr-1 dark:text-white">、</Text>}
         </Fragment>
       ))}
     </View>

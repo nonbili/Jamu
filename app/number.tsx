@@ -9,6 +9,7 @@ import { measureWords } from '@/lib/numbers'
 import { Kana } from '@/components/Kana'
 import { colors } from '@/lib/colors'
 import { speakJa, stopJa } from '@/components/Kana'
+import { useColorScheme } from 'nativewind'
 
 const items0: [number, string, string][] = [
   [1, '一', 'いち'],
@@ -46,6 +47,10 @@ const tabs2 = Object.keys(measureWords).filter((x) => !tabs1.includes(x))
 export default function NumberScreen() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [tabIndex, setTabIndex] = useState(-1)
+  const { colorScheme } = useColorScheme()
+  const isDark = colorScheme === 'dark'
+  const currentColors = isDark ? colors.dark : colors.light
+
   const key = tabs1[tabIndex] || tabs2[tabIndex - tabs1.length]
   const items = measureWords[key as keyof typeof measureWords] || {}
 
@@ -74,19 +79,19 @@ export default function NumberScreen() {
           headerRight: () => (
             <View className="flex-row items-center gap-3">
               <MaterialIcons.Button
-                color={colors.icon}
+                color={currentColors.icon}
                 backgroundColor="transparent"
                 iconStyle={{ marginRight: 0 }}
                 name={isPlaying ? 'stop' : 'volume-up'}
                 size={24}
                 onPress={() => (isPlaying ? stopRead() : startRead())}
-                underlayColor={colors.underlay}
+                underlayColor={currentColors.underlay}
               />
             </View>
           ),
         }}
       />
-      <ScrollView className="py-3 bg-white">
+      <ScrollView className="py-3 bg-white dark:bg-slate-950">
         <View className="px-3 mb-5 gap-2">
           <Tabs tabs={tabs1} tabIndex={tabIndex} onChange={(index) => onChangeTab(index)} />
           <Tabs
@@ -99,7 +104,7 @@ export default function NumberScreen() {
         {Object.entries(items).map(([num, kana]) => {
           return (
             <View className="flex-row items-center gap-8 mb-4 px-4" key={num}>
-              <Text className="text-lg w-[20%]">{key == 'つ' && num == '10' ? '10' : `${num}${key}`}</Text>
+              <Text className="text-lg w-[20%] dark:text-white">{key == 'つ' && num == '10' ? '10' : `${num}${key}`}</Text>
               <Kana value={kana} />
             </View>
           )
@@ -107,8 +112,8 @@ export default function NumberScreen() {
         {tabIndex == -1 &&
           items0.map(([num, kanji, kana]) => (
             <View className="flex-row gap-8 mb-3 px-4" key={num}>
-              <Text className="w-[10%] font-bold">{num}</Text>
-              <Text className="w-[10%]">{kanji}</Text>
+              <Text className="w-[10%] font-bold dark:text-white">{num}</Text>
+              <Text className="w-[10%] dark:text-white">{kanji}</Text>
               <Kana value={kana} />
             </View>
           ))}

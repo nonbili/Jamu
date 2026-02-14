@@ -38,5 +38,6 @@ yarn-error.*
 
 
 android
+ios
 
 *-env.d.ts

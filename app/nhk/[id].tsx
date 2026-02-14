@@ -1,18 +1,14 @@
 import { NhkPlayer } from '@/components/nhk/NhkPlayer'
-import { fetchNewsArticle } from '@/lib/nhk'
 import { nhk$ } from '@/states/nhk'
 import { useValue } from '@legendapp/state/react'
 import dayjs from 'dayjs'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { useEffect, useMemo, useState } from 'react'
-import { Text, View, Share } from 'react-native'
+import { useMemo } from 'react'
+import { Text, View, Share, Platform } from 'react-native'
 import { WebView } from 'react-native-webview'
-import { Button, ContextMenu, Switch } from '@expo/ui/jetpack-compose'
-import { colors } from '@/lib/colors'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { ui$ } from '@/states/ui'
 import { settings$ } from '@/states/settings'
 import { useColorScheme } from 'nativewind'
+import { NouMenu } from '@/components/menu/NouMenu'
 
 function patchNewsBody(body: string, isDark: boolean) {
   return /* HTML */ `
@@ -48,11 +44,10 @@ export default function NhkIdScreen() {
   const { list, autoPlay } = useValue(nhk$)
   const { colorScheme } = useColorScheme()
   const isDark = colorScheme === 'dark'
-  const currentColors = isDark ? colors.dark : colors.light
   const router = useRouter()
 
   const { news, index, html } = useMemo(() => {
-    const index = list.findIndex((x) => x.id == params.id)
+    const index = list.findIndex((x) => x.id === params.id)
     const news = list[index]
     const html = news ? patchNewsBody(news.html, isDark) : ''
     return { news, index, html }
@@ -78,32 +73,15 @@ export default function NhkIdScreen() {
         options={{
           title: '',
           headerRight: () => (
-            <View className="-mr-3">
-              <ContextMenu color={currentColors.bg}>
-                <ContextMenu.Items>
-                  <Button
-                    elementColors={{
-                      containerColor: currentColors.bg,
-                      contentColor: currentColors.text,
-                    }}
-                    onPress={() => Share.share({ message: news.webUrl })}
-                  >
-                    Share
-                  </Button>
-                </ContextMenu.Items>
-                <ContextMenu.Trigger>
-                  <Button
-                    elementColors={{
-                      containerColor: 'transparent',
-                      contentColor: currentColors.icon,
-                    }}
-                    leadingIcon="filled.MoreVert"
-                  >
-                    {''}
-                  </Button>
-                </ContextMenu.Trigger>
-              </ContextMenu>
-            </View>
+            <NouMenu
+              trigger={Platform.OS === 'ios' ? 'ellipsis' : 'filled.MoreVert'}
+              items={[
+                {
+                  label: 'Share',
+                  handler: () => Share.share({ message: news.webUrl }),
+                },
+              ]}
+            />
           ),
         }}
       />

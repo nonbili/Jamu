@@ -10,6 +10,7 @@ import { useValue } from '@legendapp/state/react'
 import { settings$ } from '@/states/settings'
 import { useColorScheme } from 'nativewind'
 import { useEffect, useMemo } from 'react'
+import { Toast } from '@/components/Toast'
 
 export default function RootLayout() {
   const insets = useSafeAreaInsets()
@@ -52,6 +53,7 @@ export default function RootLayout() {
           }}
         />
         <View style={{ height: insets.bottom, backgroundColor: currentColors.bg }} />
+        <Toast />
       </View>
     </ThemeProvider>
   )

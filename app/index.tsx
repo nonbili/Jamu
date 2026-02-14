@@ -1,27 +1,19 @@
-import { Link, Redirect, Stack } from 'expo-router'
-import { Image } from 'expo-image'
-import { Pressable, ScrollView, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Link, Stack } from 'expo-router'
+import { Pressable, ScrollView, Text, Platform } from 'react-native'
 import { useState } from 'react'
-import { Button, ContextMenu } from '@expo/ui/jetpack-compose'
-import { colors } from '@/lib/colors'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SettingsModal } from '@/components/modal/SettingsModal'
 import { JapaneseMissingModal } from '@/components/modal/JapaneseMissingModal'
-import { useColorScheme } from 'nativewind'
+import { NouMenu } from '@/components/menu/NouMenu'
 
 const items = [
   ['/gojuon', '🔤 五十音'],
   ['/number', '🔢 数字'],
   ['/nhk', '📰 NHK Easy News'],
-  ['/quiz', '❓ クイズ'],
+  ['/quiz', '💡 クイズ'],
 ]
 
 export default function HomeScreen() {
   const [settingsModalShown, setSettingsModalShown] = useState(false)
-  const { colorScheme } = useColorScheme()
-  const isDark = colorScheme === 'dark'
-  const currentColors = isDark ? colors.dark : colors.light
 
   return (
     <>
@@ -30,32 +22,15 @@ export default function HomeScreen() {
           title: '🎌',
           headerTitleAlign: 'center',
           headerRight: () => (
-            <View className="-mr-3">
-              <ContextMenu color={currentColors.bg}>
-                <ContextMenu.Items>
-                  <Button
-                    elementColors={{
-                      containerColor: currentColors.bg,
-                      contentColor: currentColors.text,
-                    }}
-                    onPress={() => setSettingsModalShown(true)}
-                  >
-                    Settings
-                  </Button>
-                </ContextMenu.Items>
-                <ContextMenu.Trigger>
-                  <Button
-                    elementColors={{
-                      containerColor: 'transparent',
-                      contentColor: currentColors.icon,
-                    }}
-                    leadingIcon="filled.MoreVert"
-                  >
-                    {''}
-                  </Button>
-                </ContextMenu.Trigger>
-              </ContextMenu>
-            </View>
+            <NouMenu
+              trigger={Platform.OS === 'ios' ? 'ellipsis' : 'filled.MoreVert'}
+              items={[
+                {
+                  label: 'Settings',
+                  handler: () => setSettingsModalShown(true),
+                },
+              ]}
+            />
           ),
         }}
       />

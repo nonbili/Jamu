@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { ScrollView, Text, View, Pressable, ToastAndroid, Platform } from 'react-native'
+import { ScrollView, Text, View, Pressable } from 'react-native'
 import { quiz$ } from '@/states/quiz'
 import { observer } from '@legendapp/state/react'
 import dayjs from 'dayjs'
@@ -7,6 +7,7 @@ import { useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import * as Clipboard from 'expo-clipboard'
 import * as Haptics from 'expo-haptics'
+import { showToast } from '@/states/ui'
 
 const HistoryPage = observer(() => {
   const history = quiz$.history.get()
@@ -14,9 +15,7 @@ const HistoryPage = observer(() => {
 
   const copyToClipboard = async (text: string) => {
     await Clipboard.setStringAsync(text)
-    if (Platform.OS === 'android') {
-      ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT)
-    }
+    showToast('Copied to clipboard')
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 

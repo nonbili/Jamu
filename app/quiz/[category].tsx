@@ -1,13 +1,13 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
-import { Text, View, Pressable, ScrollView, Alert, ToastAndroid, Platform } from 'react-native'
+import { Text, View, Pressable, ScrollView } from 'react-native'
 import { generateQuizSession } from '@/lib/quiz'
 import { QuizQuestion, addQuizSession } from '@/states/quiz'
 import { settings$ } from '@/states/settings'
-import { colors } from '@/lib/colors'
 import * as Haptics from 'expo-haptics'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import * as Clipboard from 'expo-clipboard'
+import { showToast } from '@/states/ui'
 
 const categoryLabels: Record<string, string> = {
   gojuon: '五十音',
@@ -35,9 +35,7 @@ export default function QuizSessionPage() {
 
   const copyToClipboard = async (text: string) => {
     await Clipboard.setStringAsync(text)
-    if (Platform.OS === 'android') {
-      ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT)
-    }
+    showToast('Copied to clipboard')
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 

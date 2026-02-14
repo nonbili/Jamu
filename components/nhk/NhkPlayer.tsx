@@ -1,7 +1,6 @@
 import { Button, Pressable, Text, View } from 'react-native'
 import { setAudioModeAsync, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { Slider } from '@expo/ui/jetpack-compose'
 import { IconForward, IconRewind } from '../icons/Icons'
 import { useEffect } from 'react'
 import { ui$ } from '@/states/ui'

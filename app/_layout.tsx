@@ -20,7 +20,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     setColorScheme(theme)
-  }, [theme])
+  }, [setColorScheme, theme])
 
   const isDark = useMemo(() => {
     if (theme === 'system') {
@@ -41,7 +41,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={navigationTheme}>
-      <View style={{ flex: 1, backgroundColor: currentColors.bg }}>
+      <>
         <StatusBar style={isDark ? 'light' : 'dark'} />
         <Stack
           screenOptions={{
@@ -52,9 +52,21 @@ export default function RootLayout() {
             contentStyle: { backgroundColor: currentColors.bg },
           }}
         />
-        <View style={{ height: insets.bottom, backgroundColor: currentColors.bg }} />
+        {insets.bottom > 0 && (
+          <View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: insets.bottom,
+              backgroundColor: currentColors.bg,
+            }}
+          />
+        )}
         <Toast />
-      </View>
+      </>
     </ThemeProvider>
   )
 }

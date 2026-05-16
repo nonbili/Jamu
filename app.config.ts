@@ -43,6 +43,8 @@ module.exports = ({ config }: { config: ExpoConfig }) => {
       ],
       'expo-font',
       'expo-audio',
+      'expo-image',
+      'expo-web-browser',
       './plugins/withAndroidPlugin.ts',
     ],
     experiments: {

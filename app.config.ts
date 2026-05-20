@@ -1,7 +1,7 @@
 import 'ts-node/register'
 
 import { ExpoConfig } from 'expo/config'
-import { version, versionCode } from './package.json'
+import { version, versionCode, buildNumber } from './package.json'
 
 module.exports = ({ config }: { config: ExpoConfig }) => {
   return {
@@ -15,6 +15,7 @@ module.exports = ({ config }: { config: ExpoConfig }) => {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'jp.nonbili.jamu',
+      buildNumber,
     },
     android: {
       versionCode,
@@ -22,7 +23,6 @@ module.exports = ({ config }: { config: ExpoConfig }) => {
         foregroundImage: './assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff',
       },
-      edgeToEdgeEnabled: true,
       package: 'jp.nonbili.jamu',
     },
     web: {

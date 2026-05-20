@@ -1,8 +1,9 @@
 {
   "name": "jamu",
   "main": "expo-router/entry",
-  "version": "0.1.4",
-  "versionCode": 5,
+  "version": "0.1.5",
+  "versionCode": 6,
+  "buildNumber": "2",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",

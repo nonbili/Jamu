@@ -1,0 +1,2 @@
+- add trivia
+- add more counter words

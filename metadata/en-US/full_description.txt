@@ -7,4 +7,5 @@ An app to help learn Japanese.
 <li>Numbers (数字)</li>
 <li>NHK Easy News</li>
 <li>Quiz</li>
+<li>Trivia (豆知識)</li>
 </ul>

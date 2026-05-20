@@ -20,6 +20,7 @@ An app to help learn Japanese.
 - Numbers (数字)
 - NHK Easy News
 - Quiz
+- Trivia (豆知識)
 
 ## Screenshots
 

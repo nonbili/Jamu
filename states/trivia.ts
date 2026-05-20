@@ -33,6 +33,13 @@ export const trivia$ = observable<Store>({
   syncedAt: 0,
 })
 
+// Transient fetch status for the list UI. Not persisted, so it never resurfaces
+// a stale "loading" after a relaunch.
+export const triviaStatus$ = observable<{ loading: boolean; error: boolean }>({
+  loading: false,
+  error: false,
+})
+
 syncObservable(trivia$, {
   persist: {
     name: 'trivia',

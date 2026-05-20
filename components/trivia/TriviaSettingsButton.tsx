@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, Pressable, Switch, Text, View } from 'react-native'
+import { Modal, Pressable, Text, View } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useValue } from '@legendapp/state/react'
 import { settings$ } from '@/states/settings'
@@ -14,6 +14,9 @@ function TriviaSettingsModal({ onClose }: { onClose: () => void }) {
   const insets = useSafeAreaInsets()
   const { triviaBilingual, triviaLang } = useValue(settings$)
 
+  const selectNoTranslation = () => settings$.triviaBilingual.set(false)
+  const selectLang = (lang: string) => settings$.assign({ triviaLang: lang, triviaBilingual: true })
+
   return (
     <Modal animationType="slide" transparent visible onRequestClose={onClose}>
       <View
@@ -24,30 +27,26 @@ function TriviaSettingsModal({ onClose }: { onClose: () => void }) {
           paddingHorizontal: 16,
         }}
       >
-        <Text className="text-[12px] font-bold text-slate-500 mb-4 uppercase">言語設定</Text>
+        <Text className="text-[12px] font-bold text-slate-500 mb-4 uppercase">翻訳</Text>
 
-        <View className="bg-white dark:bg-slate-900 rounded-2xl p-4 mb-6">
-          <View className="flex-row items-center justify-between">
-            <Text className="text-base dark:text-white">二言語で読む</Text>
-            <Switch
-              value={triviaBilingual}
-              onValueChange={(val) => settings$.triviaBilingual.set(val)}
-            />
-          </View>
-        </View>
-
-        <Text className="text-[12px] font-bold text-slate-500 mb-4 uppercase">翻訳言語</Text>
         <View className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden">
-          {LANGS.map((lang, i) => (
+          <Pressable
+            onPress={selectNoTranslation}
+            className="flex-row items-center justify-between px-4 py-3 active:bg-slate-100 dark:active:bg-slate-800"
+          >
+            <Text className="text-base dark:text-white">翻訳なし</Text>
+            {!triviaBilingual && <MaterialIcons name="check" size={20} color="#2563eb" />}
+          </Pressable>
+          {LANGS.map((lang) => (
             <Pressable
               key={lang}
-              onPress={() => settings$.triviaLang.set(lang)}
-              className={`flex-row items-center justify-between px-4 py-3 active:bg-slate-100 dark:active:bg-slate-800 ${
-                i > 0 ? 'border-t border-slate-100 dark:border-slate-800' : ''
-              }`}
+              onPress={() => selectLang(lang)}
+              className="flex-row items-center justify-between px-4 py-3 border-t border-slate-100 dark:border-slate-800 active:bg-slate-100 dark:active:bg-slate-800"
             >
               <Text className="text-base dark:text-white">{languageNames[lang] ?? lang}</Text>
-              {lang === triviaLang && <MaterialIcons name="check" size={20} color="#2563eb" />}
+              {triviaBilingual && triviaLang === lang && (
+                <MaterialIcons name="check" size={20} color="#2563eb" />
+              )}
             </Pressable>
           ))}
         </View>

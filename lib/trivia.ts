@@ -1,4 +1,4 @@
-import { Tidbit, TidbitCategory, trivia$ } from '@/states/trivia'
+import { Tidbit, TidbitCategory, trivia$, triviaStatus$ } from '@/states/trivia'
 import { settings$ } from '@/states/settings'
 
 const threshold = 6 * 3600 * 1000 // 6 hours
@@ -16,12 +16,15 @@ export async function fetchTidbits(lang: string = 'ja') {
   if (fresh && trivia$.lang.get() === lang && trivia$.list.get().length) {
     return
   }
+  triviaStatus$.assign({ loading: true, error: false })
   try {
     const res = await fetch(`${BASE}/api/tidbits/${lang}.json`)
     const data = (await res.json()) as { tidbits: Tidbit[] }
     trivia$.assign({ list: data.tidbits, lang, syncedAt: now })
+    triviaStatus$.assign({ loading: false, error: false })
   } catch (e) {
     console.error(e)
+    triviaStatus$.assign({ loading: false, error: true })
   }
 }
 

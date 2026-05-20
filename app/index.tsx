@@ -10,6 +10,7 @@ const items = [
   ['/number', '🔢 数字'],
   ['/nhk', '📰 NHK Easy News'],
   ['/quiz', '💡 クイズ'],
+  ['/trivia', '🫘 豆知識'],
 ]
 
 export default function HomeScreen() {

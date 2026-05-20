@@ -1,39 +1,43 @@
 import { colors } from '@/lib/colors'
-import { Button, ContextMenu } from '@expo/ui/jetpack-compose'
+import { DropdownMenu, DropdownMenuItem, Host, Icon, IconButton, Text } from '@expo/ui/jetpack-compose'
 import type { Item } from './NouMenu'
 import { useColorScheme } from 'nativewind'
+import { useState } from 'react'
 
-export const NouMenu: React.FC<{ trigger: string; items: Item[] }> = ({ trigger, items }) => {
+export const NouMenu: React.FC<{ trigger: string; items: Item[] }> = ({ items }) => {
   const { colorScheme } = useColorScheme()
   const isDark = colorScheme === 'dark'
   const currentColors = isDark ? colors.dark : colors.light
+  const [expanded, setExpanded] = useState(false)
 
   const menuItems = items.map((item, index) => (
-    <Button
+    <DropdownMenuItem
       key={index}
-      elementColors={{
-        containerColor: currentColors.bg,
-        contentColor: currentColors.text,
+      elementColors={{ textColor: currentColors.text }}
+      onClick={() => {
+        setExpanded(false)
+        item.handler()
       }}
-      onPress={item.handler}
     >
-      {item.label}
-    </Button>
+      <DropdownMenuItem.Text>
+        <Text color={currentColors.text}>{item.label}</Text>
+      </DropdownMenuItem.Text>
+    </DropdownMenuItem>
   ))
 
   return (
-    <ContextMenu color={currentColors.bg}>
-      <ContextMenu.Items>{menuItems}</ContextMenu.Items>
-      <ContextMenu.Trigger>
-        <Button
-          variant="borderless"
-          style={{ width: 52, minWidth: 0 }}
-          elementColors={{ containerColor: 'transparent', contentColor: currentColors.icon }}
-          leadingIcon={trigger as any}
-        >
-          {''}
-        </Button>
-      </ContextMenu.Trigger>
-    </ContextMenu>
+    <Host matchContents>
+      <DropdownMenu color={currentColors.bg} expanded={expanded} onDismissRequest={() => setExpanded(false)}>
+        <DropdownMenu.Items>{menuItems}</DropdownMenu.Items>
+        <DropdownMenu.Trigger>
+          <IconButton
+            colors={{ containerColor: 'transparent', contentColor: currentColors.icon }}
+            onClick={() => setExpanded(true)}
+          >
+            <Icon source={require('@/assets/icons/more_vert.xml')} tint={currentColors.icon} size={24} />
+          </IconButton>
+        </DropdownMenu.Trigger>
+      </DropdownMenu>
+    </Host>
   )
 }

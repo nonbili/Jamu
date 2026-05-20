@@ -1,7 +1,6 @@
 import { Image } from 'expo-image'
 import { Platform, Pressable, ScrollView, Text, View } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Fragment, useState } from 'react'
 import { Stack } from 'expo-router'
 import { Tabs } from '@/components/tabs/Tabs'

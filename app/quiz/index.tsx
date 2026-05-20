@@ -13,7 +13,7 @@ const allCategories = [
 
 const QuizIndex = observer(() => {
   const { quizCategories } = useValue(settings$)
-  
+
   const categories = allCategories.filter(cat => {
     if (cat.id === 'mixed') return true
     return quizCategories[cat.id as keyof typeof quizCategories]

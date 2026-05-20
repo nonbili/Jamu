@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar'
 import 'react-native-reanimated'
 import './global.css'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { View, useColorScheme as useSystemColorScheme } from 'react-native'
+import { useColorScheme as useSystemColorScheme } from 'react-native'
 import { colors } from '@/lib/colors'
 import { useValue } from '@legendapp/state/react'
 import { settings$ } from '@/states/settings'
@@ -37,22 +37,9 @@ export default function RootLayout() {
           headerTitleStyle: { color: currentColors.text },
           headerStyle: { backgroundColor: currentColors.bg },
           headerShadowVisible: false,
-          contentStyle: { backgroundColor: currentColors.bg },
+          contentStyle: { backgroundColor: currentColors.bg, paddingBottom: insets.bottom },
         }}
       />
-      {insets.bottom > 0 && (
-        <View
-          pointerEvents="none"
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: insets.bottom,
-            backgroundColor: currentColors.bg,
-          }}
-        />
-      )}
       <Toast />
     </>
   )
